@@ -4,8 +4,7 @@
 	import teamsData from '$lib/teams.json';
 
 	// Kickoff: January 10, 2026, 12:00 PM EST
-	const KICKOFF_DATE = new Date('2025-12-29T15:51:00-05:00');
-	// const KICKOFF_DATE = new Date('2026-01-10T12:00:00-05:00');
+	const KICKOFF_DATE = new Date('2026-01-10T12:00:00-05:00');
 
 	interface TimeLeft {
 		days: number;
@@ -24,6 +23,7 @@
 	});
 
 	let kickoffStarted = $state(false);
+	let showTotalSeconds = $state(false);
 
 	function calculateTimeLeft(): TimeLeft {
 		const now = new Date();
@@ -46,16 +46,38 @@
 		return num.toString().padStart(2, '0');
 	}
 
-	// Extract team number from the last 4 digits (MM:SS)
+	// Get total seconds remaining
+	function getTotalSeconds(): number {
+		return Math.floor(timeLeft.total / 1000);
+	}
+
+	// Extract team number from the last 4 digits
 	function getTeamNumber(): number {
-		const mmss = timeLeft.minutes * 100 + timeLeft.seconds;
-		return mmss;
+		if (showTotalSeconds) {
+			return getTotalSeconds() % 10000;
+		}
+		return timeLeft.minutes * 100 + timeLeft.seconds;
 	}
 
 	// Get team info from data
 	function getTeamInfo(teamNum: number): { name: string } | null {
 		const team = (teamsData as Record<string, { name: string }>)[teamNum.toString()];
 		return team || null;
+	}
+
+	// Split total seconds into prefix (non-highlighted) and suffix (highlighted, last 4 digits)
+	function splitTotalSeconds(): { prefix: string; suffix: string } {
+		const total = getTotalSeconds();
+		const totalStr = total.toString();
+
+		if (totalStr.length <= 4) {
+			return { prefix: '', suffix: totalStr };
+		}
+
+		return {
+			prefix: totalStr.slice(0, -4),
+			suffix: totalStr.slice(-4)
+		};
 	}
 
 	onMount(() => {
@@ -118,35 +140,47 @@
 			<div
 				class="mb-4 rounded-lg bg-white/90 px-6 py-4 font-mono text-5xl font-bold md:px-8 md:text-7xl lg:text-8xl"
 			>
-				<span class="text-frc-blue">{padZero(timeLeft.days)}</span>
-				<span class="text-frc-blue/50">:</span>
-				<span class="text-frc-blue">{padZero(timeLeft.hours)}</span>
-				<span class="text-frc-blue/50">:</span>
-				{#if timeLeft.minutes >= 10}
-					<span class="text-frc-gold">{padZero(timeLeft.minutes)}</span>
-				{:else if timeLeft.minutes > 0}
-					<span class="text-frc-blue">0</span><span class="text-frc-gold">{timeLeft.minutes}</span>
+				{#if showTotalSeconds}
+					{@const parts = splitTotalSeconds()}{#if parts.prefix}<span class="text-frc-blue">{parts.prefix}</span>{/if}<span class="text-frc-gold">{parts.suffix}</span>
 				{:else}
-					<span class="text-frc-blue">00</span>
-				{/if}
-				<span class={timeLeft.minutes > 0 ? 'text-frc-gold' : 'text-frc-blue/50'}>:</span>
-				{#if timeLeft.minutes > 0 || timeLeft.seconds >= 10}
-					<span class="text-frc-gold">{padZero(timeLeft.seconds)}</span>
-				{:else if timeLeft.seconds > 0}
-					<span class="text-frc-blue">0</span><span class="text-frc-gold">{timeLeft.seconds}</span>
-				{:else}
-					<span class="text-frc-blue">00</span>
+					<span class="text-frc-blue">{padZero(timeLeft.days)}</span>
+					<span class="text-frc-blue/50">:</span>
+					<span class="text-frc-blue">{padZero(timeLeft.hours)}</span>
+					<span class="text-frc-blue/50">:</span>
+					{#if timeLeft.minutes >= 10}
+						<span class="text-frc-gold">{padZero(timeLeft.minutes)}</span>
+					{:else if timeLeft.minutes > 0}
+						<span class="text-frc-blue">0</span><span class="text-frc-gold">{timeLeft.minutes}</span>
+					{:else}
+						<span class="text-frc-blue">00</span>
+					{/if}
+					<span class={timeLeft.minutes > 0 ? 'text-frc-gold' : 'text-frc-blue/50'}>:</span>
+					{#if timeLeft.minutes > 0 || timeLeft.seconds >= 10}
+						<span class="text-frc-gold">{padZero(timeLeft.seconds)}</span>
+					{:else if timeLeft.seconds > 0}
+						<span class="text-frc-blue">0</span><span class="text-frc-gold">{timeLeft.seconds}</span>
+					{:else}
+						<span class="text-frc-blue">00</span>
+					{/if}
 				{/if}
 			</div>
 
 			<!-- Team Display -->
-			<div class="min-w-64 rounded-lg bg-white/90 px-6 py-4 md:min-w-80 md:px-8 text-lg font-medium md:text-xl">
+			<div class="min-w-64 rounded-lg bg-white/90 px-6 py-4 md:min-w-80 md:px-8 text-lg font-bold md:text-xl">
 				{#if teamInfo}
 					<span class="text-frc-blue">{teamInfo.name}</span>
 				{:else}
 					<span class="text-frc-blue/70">Team Not Found</span>
 				{/if}
 			</div>
+
+			<!-- Toggle Button -->
+			<button
+				class="mt-4 rounded-lg bg-white/90 px-4 py-2 text-sm font-medium text-frc-blue transition-colors hover:bg-white"
+				onclick={() => (showTotalSeconds = !showTotalSeconds)}
+			>
+				{showTotalSeconds ? 'Show Clock' : 'Show Total Seconds'}
+			</button>
 		</div>
 	{/if}
 </main>
