@@ -189,7 +189,7 @@
 		href="https://github.com/Nsl106/frc-kickoff-countdown"
 		target="_blank"
 		rel="noopener noreferrer"
-		class="absolute bottom-4 right-4 rounded-full bg-white/80 p-2 text-gray-700 transition-colors hover:bg-white hover:text-black"
+		class="absolute bottom-4 left-4 rounded-full bg-white/80 p-2 text-gray-700 transition-colors hover:bg-white hover:text-black"
 		aria-label="View source on GitHub"
 	>
 		<svg class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24">
