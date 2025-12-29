@@ -111,11 +111,11 @@
 	{#if kickoffStarted}
 		<!-- Kickoff Started State -->
 		<div class="flex flex-col items-center text-center">
-			<img src="{base}/rebuilt_logo.png" alt="REBUILT Logo" class="mb-8 w-[32rem] md:w-[40rem]" />
+			<img src="{base}/rebuilt_logo.png" alt="REBUILT Logo" class="mb-4 w-64 md:mb-8 md:w-[32rem] lg:w-[40rem]" />
 
 			<!-- Timer Display (at zero) -->
 			<div
-				class="mb-4 rounded-lg bg-white/90 px-6 py-4 font-mono text-5xl font-bold md:px-8 md:text-7xl lg:text-8xl"
+				class="mb-4 rounded-lg bg-white/90 px-4 py-3 font-mono text-3xl font-bold md:px-8 md:py-4 md:text-7xl lg:text-8xl"
 			>
 				<span class="text-frc-blue">00</span>
 				<span class="text-frc-blue/50">:</span>
@@ -134,11 +134,11 @@
 		<!-- Countdown State -->
 		<div class="flex flex-col items-center text-center">
 			<!-- Logo -->
-			<img src="{base}/rebuilt_logo.png" alt="REBUILT Logo" class="mb-8 w-[32rem] md:w-[40rem]" />
+			<img src="{base}/rebuilt_logo.png" alt="REBUILT Logo" class="mb-4 w-64 md:mb-8 md:w-[32rem] lg:w-[40rem]" />
 
 			<!-- Timer Display -->
 			<div
-				class="mb-4 rounded-lg bg-white/90 px-6 py-4 font-mono text-5xl font-bold md:px-8 md:text-7xl lg:text-8xl"
+				class="mb-4 rounded-lg bg-white/90 px-4 py-3 font-mono text-3xl font-bold md:px-8 md:py-4 md:text-7xl lg:text-8xl"
 			>
 				{#if showTotalSeconds}
 					{@const parts = splitTotalSeconds()}{#if parts.prefix}<span class="text-frc-blue">{parts.prefix}</span>{/if}<span class="text-frc-gold">{parts.suffix}</span>
@@ -166,7 +166,7 @@
 			</div>
 
 			<!-- Team Display -->
-			<div class="min-w-64 rounded-lg bg-white/90 px-6 py-4 md:min-w-80 md:px-8 text-lg font-bold md:text-xl">
+			<div class="min-w-48 rounded-lg bg-white/90 px-4 py-3 text-base font-bold md:min-w-80 md:px-8 md:py-4 md:text-xl">
 				{#if teamInfo}
 					<span class="text-frc-blue">{teamInfo.name}</span>
 				{:else}
