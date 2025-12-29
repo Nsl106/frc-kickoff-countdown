@@ -4,7 +4,7 @@
 	import teamsData from '$lib/teams.json';
 
 	// Kickoff: January 10, 2026, 12:00 PM EST
-	const KICKOFF_DATE = new Date('2025-12-29T15:45:00-05:00');
+	const KICKOFF_DATE = new Date('2025-12-29T15:51:00-05:00');
 	// const KICKOFF_DATE = new Date('2026-01-10T12:00:00-05:00');
 
 	interface TimeLeft {
@@ -90,6 +90,20 @@
 		<!-- Kickoff Started State -->
 		<div class="flex flex-col items-center text-center">
 			<img src="{base}/rebuilt_logo.png" alt="REBUILT Logo" class="mb-8 w-[32rem] md:w-[40rem]" />
+
+			<!-- Timer Display (at zero) -->
+			<div
+				class="mb-4 rounded-lg bg-white/90 px-6 py-4 font-mono text-5xl font-bold md:px-8 md:text-7xl lg:text-8xl"
+			>
+				<span class="text-frc-blue">00</span>
+				<span class="text-frc-blue/50">:</span>
+				<span class="text-frc-blue">00</span>
+				<span class="text-frc-blue/50">:</span>
+				<span class="text-frc-blue">00</span>
+				<span class="text-frc-blue/50">:</span>
+				<span class="text-frc-blue">00</span>
+			</div>
+
 			<div class="rounded-lg bg-white/90 px-8 py-4">
 				<h1 class="text-3xl font-bold text-frc-orange md:text-5xl">Happy Kickoff!</h1>
 			</div>
@@ -116,7 +130,13 @@
 					<span class="text-frc-blue">00</span>
 				{/if}
 				<span class={timeLeft.minutes > 0 ? 'text-frc-gold' : 'text-frc-blue/50'}>:</span>
-				<span class={timeLeft.minutes > 0 || timeLeft.seconds > 0 ? 'text-frc-gold' : 'text-frc-blue'}>{padZero(timeLeft.seconds)}</span>
+				{#if timeLeft.minutes > 0 || timeLeft.seconds >= 10}
+					<span class="text-frc-gold">{padZero(timeLeft.seconds)}</span>
+				{:else if timeLeft.seconds > 0}
+					<span class="text-frc-blue">0</span><span class="text-frc-gold">{timeLeft.seconds}</span>
+				{:else}
+					<span class="text-frc-blue">00</span>
+				{/if}
 			</div>
 
 			<!-- Team Display -->
