@@ -1,1 +1,23 @@
 @import 'tailwindcss';
+
+/* FRC 2026 REBUILT Brand Colors */
+@theme {
+	--color-frc-orange: #ea572e;
+	--color-frc-gold: #e5ae32;
+	--color-frc-blue: #598290;
+	--color-frc-green: #92dbac;
+	--color-frc-black: #000000;
+}
+
+/* Custom font for timer display */
+@font-face {
+	font-family: 'Timer';
+	src: local('JetBrains Mono'), local('Fira Code'), local('Consolas'), local('Monaco');
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	background-color: #0a0a0a;
+}
